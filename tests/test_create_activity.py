@@ -3,7 +3,7 @@ import json
 import os
 from moto import mock_dynamodb2
 from unittest.mock import patch
-from src.create_transaction import app
+from src.create_activity import app
 from contextlib import contextmanager
 
 table_name = 'Activities'
@@ -42,20 +42,6 @@ def set_up_dynamodb():
             'WriteCapacityUnits': 1
         },
     )
-
-
-@mock_dynamodb2
-def get_item_dynamodb():
-    conn = boto3.client(
-        'dynamodb',
-        region_name='us-east-1',
-        aws_access_key_id='mock',
-        aws_secret_access_key='mock',
-    )
-
-    result = conn.scan(TableName=table_name)
-
-    return result
 
 
 @patch.dict(os.environ, {
