@@ -58,7 +58,7 @@ def put_item_dynamodb():
         Item={
             'id': {'S': '#123#123#'},
             'date': {'S': '9999999999.999999'},
-            'status': {'S': 'BACKLOG'},
+            'stage': {'S': 'BACKLOG'},
             'description': {'S': 'New Activity'}
         }
     )
@@ -68,7 +68,7 @@ def put_item_dynamodb():
         Item={
             'id': {'S': '#456#456#'},
             'date': {'S': '9999999999.999999'},
-            'status': {'S': 'BACKLOG'},
+            'stage': {'S': 'BACKLOG'},
             'description': {'S': 'New Activity'}
         }
     )
@@ -87,13 +87,13 @@ def test_list_activities_200():
             {
                 'id': '#123#123#',
                 'date': '9999999999.999999',
-                'status': 'BACKLOG',
+                'stage': 'BACKLOG',
                 'description': 'New Activity'
             },
             {
                 'id': '#456#456#',
                 'date': '9999999999.999999',
-                'status': 'BACKLOG',
+                'stage': 'BACKLOG',
                 'description': 'New Activity'
             }
         ]

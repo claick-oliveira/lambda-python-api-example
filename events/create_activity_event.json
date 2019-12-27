@@ -1,5 +1,5 @@
 {
-  "body": "{\"status\": \"BACKLOG\", \"description\": \"New activity\"}",
+  "body": "{\"stage\": \"BACKLOG\", \"description\": \"New activity\"}",
   "resource": "/{proxy+}",
   "path": "/path/to/resource",
   "httpMethod": "POST",

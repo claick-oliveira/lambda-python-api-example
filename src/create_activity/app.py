@@ -36,7 +36,7 @@ def lambda_handler(message, context):
     params = {
         'id': str(uuid.uuid4()),
         'date': str(datetime.timestamp(datetime.now())),
-        'status': activity['status'],
+        'stage': activity['stage'],
         'description': activity['description']
     }
 
