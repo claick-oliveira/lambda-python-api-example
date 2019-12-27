@@ -20,26 +20,27 @@ def lambda_handler(message, context):
     aws_environment = os.environ.get('AWSENV', 'AWS')
 
     if aws_environment == 'AWS_SAM_LOCAL':
-        activities_table = boto3.client(
+        activities_table = boto3.resource(
             'dynamodb',
             endpoint_url='http://dynamodb:8000'
         )
     else:
-        activities_table = boto3.client(
+        activities_table = boto3.resource(
             'dynamodb',
             region_name=region
         )
 
+    table = activities_table.Table(table_name)
     activity = json.loads(message['body'])
 
     params = {
-        'id': {'S': str(uuid.uuid4())},
-        'date': {'S': str(datetime.timestamp(datetime.now()))},
-        'status': {'S': activity['status']},
-        'description': {'S': activity['description']}
+        'id': str(uuid.uuid4()),
+        'date': str(datetime.timestamp(datetime.now())),
+        'status': activity['status'],
+        'description': activity['description']
     }
 
-    response = activities_table.put_item(
+    response = table.put_item(
         TableName=table_name,
         Item=params
     )
