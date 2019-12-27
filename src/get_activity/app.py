@@ -11,7 +11,7 @@ def lambda_handler(message, context):
         return {
             'statusCode': 400,
             'headers': {},
-            'body': '{\'msg\': \'Bad Request\'}'
+            'body': json.dumps({'msg': 'Bad Request'})
         }
 
     table_name = os.environ.get('TABLE', 'Activities')

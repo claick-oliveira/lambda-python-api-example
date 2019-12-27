@@ -98,7 +98,7 @@ def test_get_activity_400():
         payload = {
             'statusCode': 400,
             'headers': {},
-            'body': '{\'msg\': \'Bad Request\'}'
+            'body': json.dumps({'msg': 'Bad Request'})
         }
 
         assert response == payload

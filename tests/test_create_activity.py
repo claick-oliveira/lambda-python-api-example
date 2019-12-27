@@ -56,7 +56,7 @@ def test_create_activity_201():
         payload = {
             'statusCode': 201,
             'headers': {},
-            'body': '{\'msg\': \'Activity created\'}'
+            'body': json.dumps({'msg': 'Activity created'})
         }
 
         conn = boto3.client(
@@ -85,7 +85,7 @@ def test_create_activity_400():
         payload = {
             'statusCode': 400,
             'headers': {},
-            'body': '{\'msg\': \'Bad Request\'}'
+            'body': json.dumps({'msg': 'Bad Request'})
         }
 
         assert response == payload
