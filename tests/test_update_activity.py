@@ -3,12 +3,13 @@ import json
 import os
 from moto import mock_dynamodb2
 from unittest.mock import patch
-from src.create_transaction import app
+from src.update_activity import app
 from contextlib import contextmanager
+from boto3.dynamodb.conditions import Key
 
 table_name = 'Activities'
 
-event_data = 'events/create_activity_event.json'
+event_data = 'events/update_activity_event.json'
 with open(event_data, 'r') as f:
     event = json.load(f)
 
@@ -17,6 +18,7 @@ with open(event_data, 'r') as f:
 def do_test_setup():
     with mock_dynamodb2():
         set_up_dynamodb()
+        put_item_dynamodb()
         yield
 
 
@@ -44,8 +46,7 @@ def set_up_dynamodb():
     )
 
 
-@mock_dynamodb2
-def get_item_dynamodb():
+def put_item_dynamodb():
     conn = boto3.client(
         'dynamodb',
         region_name='us-east-1',
@@ -53,9 +54,15 @@ def get_item_dynamodb():
         aws_secret_access_key='mock',
     )
 
-    result = conn.scan(TableName=table_name)
-
-    return result
+    conn.put_item(
+        TableName=table_name,
+        Item={
+            'id': {'S': '#123#123#'},
+            'date': {'S': '9999999999.999999'},
+            'stage': {'S': 'BACKLOG'},
+            'description': {'S': 'New Activity'}
+        }
+    )
 
 
 @patch.dict(os.environ, {
@@ -63,28 +70,39 @@ def get_item_dynamodb():
     'REGION': 'us-east-1',
     'AWSENV': 'MOCK'
 })
-def test_create_activity_201():
+def test_update_activity_200():
     with do_test_setup():
         response = app.lambda_handler(event, '')
 
         payload = {
-            'statusCode': 201,
-            'headers': {},
-            'body': '{\'msg\': \'Activity created\'}'
+            'msg': 'Activity updated'
         }
 
-        conn = boto3.client(
+        item = {
+            'id': '#123#123#',
+            'date': '9999999999.999999',
+            'stage': 'TODO',
+            'description': 'Update activity'
+        }
+
+        data = json.loads(response['body'])
+
+        activities_table = boto3.resource(
             'dynamodb',
             region_name='us-east-1',
             aws_access_key_id='mock',
             aws_secret_access_key='mock',
         )
 
-        item = conn.scan(TableName=table_name)
+        table = activities_table.Table(table_name)
 
-        assert item != ''
-        assert event['httpMethod'] == 'POST'
-        assert response == payload
+        response = table.query(
+            KeyConditionExpression=Key('id').eq('#123#123#')
+        )
+
+        assert event['httpMethod'] == 'PUT'
+        assert data == payload
+        assert response['Items'][0] == item
 
 
 @patch.dict(os.environ, {
@@ -92,14 +110,14 @@ def test_create_activity_201():
     'REGION': 'us-east-1',
     'AWSENV': 'MOCK'
 })
-def test_create_activity_400():
+def test_update_activity_400():
     with do_test_setup():
         response = app.lambda_handler({}, '')
 
         payload = {
             'statusCode': 400,
             'headers': {},
-            'body': '{\'msg\': \'Bad Request\'}'
+            'body': json.dumps({'msg': 'Bad Request'})
         }
 
         assert response == payload

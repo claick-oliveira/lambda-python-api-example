@@ -1,8 +1,8 @@
 {
-  "body": "{\"stage\": \"BACKLOG\", \"description\": \"New activity\"}",
+  "body": "{\"id\": \"#123#123#\", \"date\": \"9999999999.999999\", \"stage\": \"TODO\", \"description\": \"Update activity\"}",
   "resource": "/{proxy+}",
   "path": "/path/to/resource",
-  "httpMethod": "POST",
+  "httpMethod": "PUT",
   "isBase64Encoded": false,
   "queryStringParameters": {
     "foo": "bar"
@@ -55,7 +55,7 @@
     },
     "path": "/prod/path/to/resource",
     "resourcePath": "/{proxy+}",
-    "httpMethod": "POST",
+    "httpMethod": "PUT",
     "apiId": "1234567890",
     "protocol": "HTTP/1.1"
   }
