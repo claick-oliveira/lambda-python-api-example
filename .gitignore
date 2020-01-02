@@ -241,6 +241,10 @@ $RECYCLE.BIN/
 
 */build/*
 
+# AWS SAM
+*/.aws-sam/*
+samconfig.toml
+
 # Dynamodb Local
 local/dynamodb
 
