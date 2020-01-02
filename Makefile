@@ -54,7 +54,7 @@ cleanfull:
 	@ rm -rf .tox
 	@ rm -rf dist
 	@ rm -rf build
-	@ rm -rf **/**/__pycache__
+	@ rm -rf **/__pycache__
 	@ rm -rf *.egg-info
 	@ rm -rf .coverage*
 	@ rm -rf **/*.pyc
@@ -69,7 +69,7 @@ clean:
 	@ rm -rf .tox
 	@ rm -rf dist
 	@ rm -rf build
-	@ rm -rf **/**/__pycache__
+	@ rm -rf **/__pycache__
 	@ rm -rf *.egg-info
 	@ rm -rf .coverage*
 	@ rm -rf **/*.pyc
